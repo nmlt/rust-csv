@@ -6,6 +6,7 @@ use std::{
 };
 
 use serde::de::Deserialize;
+use serde::{Deserialize as SerdeDeserialize, Serialize};
 
 use crate::{
     byte_record::{ByteRecord, ByteRecordIter, Position},
@@ -34,7 +35,7 @@ use crate::{
 ///
 /// Two `StringRecord`s are compared on the basis of their field data. Any
 /// position information associated with the records is ignored.
-#[derive(Clone, Eq)]
+#[derive(Clone, Eq, SerdeDeserialize, Serialize)]
 pub struct StringRecord(ByteRecord);
 
 impl PartialEq for StringRecord {

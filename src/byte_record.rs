@@ -6,6 +6,8 @@ use std::{
 };
 
 use serde::de::Deserialize;
+use serde::Deserialize as SerdeDeserialize;
+use serde::Serialize;
 
 use crate::{
     deserializer::deserialize_byte_record,
@@ -32,7 +34,7 @@ use crate::{
 ///
 /// Two `ByteRecord`s are compared on the basis of their field data. Any
 /// position information associated with the records is ignored.
-#[derive(Clone, Eq)]
+#[derive(Clone, Eq, SerdeDeserialize, Serialize)]
 pub struct ByteRecord(Box<ByteRecordInner>);
 
 impl PartialEq for ByteRecord {
@@ -85,7 +87,7 @@ impl fmt::Debug for ByteRecord {
 /// moving a single pointer. The optimization is dubious at best, but does
 /// seem to result in slightly better numbers in microbenchmarks. Methinks this
 /// may heavily depend on the underlying allocator.
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, SerdeDeserialize, Serialize)]
 struct ByteRecordInner {
     /// The position of this byte record.
     pos: Option<Position>,
@@ -587,7 +589,7 @@ impl ByteRecord {
 /// Byte offsets and record indices start at `0`. Line numbers start at `1`.
 ///
 /// A CSV reader will automatically assign the position of each record.
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, SerdeDeserialize, Serialize)]
 pub struct Position {
     byte: u64,
     line: u64,
@@ -643,7 +645,7 @@ impl Position {
 }
 
 /// The bounds of fields in a single record.
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, SerdeDeserialize, Serialize)]
 struct Bounds {
     /// The ending index of each field.
     ends: Vec<usize>,
